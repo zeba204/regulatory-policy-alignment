@@ -1,0 +1,28 @@
+You are a regulatory policy expert.
+Based on the following regulatory policy, provide 3 recommendations.
+
+Policy Name: {policy_name}
+Policy Content: {policy_content}
+
+Provide your response in the following JSON format only:
+{
+    "recommendations": [
+        {
+            "action_type": "type of action",
+            "description": "detailed description",
+            "priority": "HIGH/MEDIUM/LOW"
+        },
+        {
+            "action_type": "type of action",
+            "description": "detailed description",
+            "priority": "HIGH/MEDIUM/LOW"
+        },
+        {
+            "action_type": "type of action",
+            "description": "detailed description",
+            "priority": "HIGH/MEDIUM/LOW"
+        }
+    ]
+}
+
+Return JSON only. No extra text.
