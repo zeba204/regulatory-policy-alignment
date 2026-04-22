@@ -17,17 +17,17 @@ public class PolicyRecordController {
 
     // CREATE
     @PostMapping
-    public PolicyRecord savePolicy(@Valid @RequestBody PolicyRecord policy) {
+    public PolicyRecord createPolicy(@Valid @RequestBody PolicyRecord policy) {
         return service.savePolicy(policy);
     }
 
-    // READ ALL
+    // GET ALL
     @GetMapping
     public List<PolicyRecord> getAllPolicies() {
         return service.getAllPolicies();
     }
 
-    // READ BY ID
+    // GET BY ID
     @GetMapping("/{id}")
     public PolicyRecord getPolicyById(@PathVariable Long id) {
         return service.getPolicyById(id);
@@ -35,7 +35,8 @@ public class PolicyRecordController {
 
     // UPDATE
     @PutMapping("/{id}")
-    public PolicyRecord updatePolicy(@PathVariable Long id, @Valid @RequestBody PolicyRecord policy) {
+    public PolicyRecord updatePolicy(@PathVariable Long id,
+                                     @Valid @RequestBody PolicyRecord policy) {
         return service.updatePolicy(id, policy);
     }
 

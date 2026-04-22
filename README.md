@@ -182,3 +182,75 @@ Today I worked on improving the backend logic of the Regulatory Policy Alignment
 - Improve controller responses
 - Continue remaining backend tasks step by step
 
+
+# Regulatory Policy Alignment
+
+## Day 4 Progress – Java Developer 1
+
+### 🔹 Work Done Today
+Implemented REST Controller and tested all CRUD APIs using Postman. Verified that all endpoints are working correctly.
+
+---
+
+## 🔹 Tasks Completed
+
+### 1. REST Controller Implementation
+- Created `PolicyRecordController.java`
+- Added following endpoints:
+  - POST → Create new policy
+  - GET → Fetch all policies
+  - GET by ID → Fetch single policy
+  - PUT → Update policy
+  - DELETE → Delete policy
+
+---
+
+### 2. API Testing (Postman)
+
+All APIs tested successfully:
+
+-  Create Policy (POST)
+-  Get All Policies (GET)
+-  Get Policy by ID (GET)
+-  Update Policy (PUT)
+-  Delete Policy (DELETE)
+- Invalid ID Handling (Error case tested)
+
+---
+
+## 🔹 Screenshots
+
+###  Create Policy
+![Create](screenshots/post.png)
+
+###  Get All Policies
+![Get All](screenshots/get_all.png)
+
+###  Get Policy By ID
+![Get By ID](screenshots/get_by_id.png)
+
+###  Update Policy
+![Update](screenshots/update.png)
+
+###  Delete Policy
+![Delete](screenshots/delete_data.png)
+
+###  Confirm Delete
+![Confirm Delete](screenshots/confirm_delete.png)
+
+###  Invalid ID Handling
+![Invalid](screenshots/invalid_id.png)
+
+---
+
+## 🔹 Status
+✔ Controller implemented successfully  
+✔ All CRUD APIs working  
+✔ Error handling verified  
+
+---
+
+## 🔹 Next Plan (Day 5)
+- Implement JWT Authentication
+- Add validation annotations (@NotNull, @Size)
+- Improve security configuration
