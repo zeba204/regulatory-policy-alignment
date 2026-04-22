@@ -1,4 +1,4 @@
-# Day 1 Progress - Java Developer 1
+# Day 1 &day 2 Progress - Java Developer 1
 
 ## 👩‍💻 Work Done Today
 
@@ -128,3 +128,57 @@ Verified:
 - Add validation annotations (@NotNull, @Size)
 - Add exception handling
 - Improve security configuration
+
+## Day 3 Progress - Java Developer 1
+
+### Work Done Today
+
+Today I worked on improving the backend logic of the Regulatory Policy Alignment Tool. I completed the service layer properly and added exception handling for API errors.
+
+### Tasks Completed
+
+#### 1. Service Layer Improvement
+- Updated `PolicyRecordService.java`
+- Implemented proper business logic for:
+  - Create policy
+  - Get all policies
+  - Get policy by ID
+  - Update policy
+  - Delete policy
+
+#### 2. Full Update Logic
+- Improved update API logic
+- Updated all fields:
+  - policyName
+  - description
+  - category
+  - status
+
+#### 3. Exception Handling
+- Created `GlobalExceptionHandler.java`
+- Added handling for:
+  - Validation errors
+  - Runtime exceptions
+  - General exceptions
+
+#### 4. API Testing
+- Tested APIs in Postman:
+  - POST
+  - GET all
+  - GET by ID
+  - PUT
+  - DELETE
+
+### Status
+
+✅ Service layer completed  
+✅ Update logic improved  
+✅ Exception handling added  
+✅ CRUD APIs tested successfully  
+
+### Next Plan
+
+- Add validation annotations
+- Improve controller responses
+- Continue remaining backend tasks step by step
+

@@ -25,29 +25,28 @@ public class PolicyRecordService {
 
     // READ BY ID
     public PolicyRecord getPolicyById(Long id) {
-        return repository.findById(id).orElse(null);
+        return repository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Policy with ID " + id + " not found"));
     }
 
     // UPDATE
     public PolicyRecord updatePolicy(Long id, PolicyRecord newPolicy) {
+        PolicyRecord existing = repository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Policy with ID " + id + " not found"));
 
-        PolicyRecord existing = repository.findById(id).orElse(null);
+        existing.setPolicyName(newPolicy.getPolicyName());
+        existing.setDescription(newPolicy.getDescription());
+        existing.setCategory(newPolicy.getCategory());
+        existing.setStatus(newPolicy.getStatus());
 
-        if (existing != null) {
-
-            existing.setPolicyName(newPolicy.getPolicyName());
-            existing.setDescription(newPolicy.getDescription());
-            existing.setCategory(newPolicy.getCategory());
-            existing.setStatus(newPolicy.getStatus());
-
-            return repository.save(existing);
-        }
-
-        return null;
+        return repository.save(existing);
     }
 
     // DELETE
     public void deletePolicy(Long id) {
-        repository.deleteById(id);
+        PolicyRecord existing = repository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Policy with ID " + id + " not found"));
+
+        repository.delete(existing);
     }
 }
