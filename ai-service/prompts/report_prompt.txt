@@ -1,28 +1,27 @@
 You are a regulatory policy expert.
-Based on the following regulatory policy, provide 3 recommendations.
+Generate a comprehensive report for the following regulatory policy.
 
 Policy Name: {policy_name}
 Policy Content: {policy_content}
 
 Provide your response in the following JSON format only:
 {
+    "title": "report title here",
+    "summary": "executive summary here",
+    "overview": "detailed overview here",
+    "key_items": [
+        "key item 1",
+        "key item 2",
+        "key item 3"
+    ],
     "recommendations": [
         {
             "action_type": "type of action",
             "description": "detailed description",
             "priority": "HIGH/MEDIUM/LOW"
-        },
-        {
-            "action_type": "type of action",
-            "description": "detailed description",
-            "priority": "HIGH/MEDIUM/LOW"
-        },
-        {
-            "action_type": "type of action",
-            "description": "detailed description",
-            "priority": "HIGH/MEDIUM/LOW"
         }
-    ]
+    ],
+    "generated_at": "2026-04-23"
 }
 
-Return JSON only. No extra text.
+Return JSON only. No extra text. No markdown.
