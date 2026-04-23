@@ -3,6 +3,7 @@ import json
 import time
 from groq import Groq
 from dotenv import load_dotenv
+from services.cache import get_cached_response, set_cached_response
 
 load_dotenv()
 
@@ -18,6 +19,11 @@ FALLBACK_RESPONSE = {
 }
 
 def call_groq(prompt: str) -> dict:
+    # Check cache first
+    cached = get_cached_response(prompt)
+    if cached:
+        return cached
+
     max_retries = 3
     for attempt in range(max_retries):
         try:
@@ -33,7 +39,12 @@ def call_groq(prompt: str) -> dict:
                 max_tokens=1000
             )
             content = response.choices[0].message.content
-            return json.loads(content)
+            result = json.loads(content)
+            
+            # Save to cache
+            set_cached_response(prompt, result)
+            
+            return result
         except Exception as e:
             print(f"Attempt {attempt + 1} failed: {e}")
             if attempt < max_retries - 1:
