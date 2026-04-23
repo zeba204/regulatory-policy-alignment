@@ -239,7 +239,7 @@ All APIs tested successfully:
 ![Confirm Delete](screenshots/confirm_delete.png)
 
 ###  Invalid ID Handling
-![Invalid](screenshots/invalid_id.png)
+![Invalid](screenshots/invalide_id.png)
 
 ---
 
@@ -254,3 +254,41 @@ All APIs tested successfully:
 - Implement JWT Authentication
 - Add validation annotations (@NotNull, @Size)
 - Improve security configuration
+
+## Day 5 - JWT Authentication
+
+### Description
+Implemented authentication and security using JWT (JSON Web Token).
+
+### Work Done
+- Created User entity and UserRepository
+- Implemented AuthController with:
+  - Register API (/auth/register)
+  - Login API (/auth/login)
+  - Refresh API (/auth/refresh)
+- Generated JWT token using JwtUtil
+- Implemented JwtAuthFilter to validate token for each request
+- Configured Spring Security using SecurityConfig
+- Secured policy APIs using JWT token
+
+### APIs Tested
+1. Register API  
+   POST /auth/register  
+   Stores user in database  
+
+2. Login API  
+   POST /auth/login  
+   Validates user and returns JWT token  
+
+3. Refresh API  
+   POST /auth/refresh  
+   Generates new token from old token  
+
+4. Protected API  
+   GET /policy  
+   Requires Authorization header  
+
+### Learning Outcome
+- Understood JWT authentication flow
+- Learned how to secure APIs using Spring Security
+- Implemented request filtering using JwtAuthFilter
