@@ -1,11 +1,21 @@
 import os
 import json
+import time
 from groq import Groq
 from dotenv import load_dotenv
 
 load_dotenv()
 
 client = Groq(api_key=os.getenv("GROQ_API_KEY"))
+
+FALLBACK_RESPONSE = {
+    "title": "Service Temporarily Unavailable",
+    "description": "AI service is temporarily unavailable. Please try again later.",
+    "key_points": ["Service unavailable"],
+    "impact": "Unable to process request at this time",
+    "recommendations": [],
+    "is_fallback": True
+}
 
 def call_groq(prompt: str) -> dict:
     max_retries = 3
@@ -26,6 +36,8 @@ def call_groq(prompt: str) -> dict:
             return json.loads(content)
         except Exception as e:
             print(f"Attempt {attempt + 1} failed: {e}")
-            if attempt == max_retries - 1:
-                return {"error": str(e), "is_fallback": True}
-    return {"error": "All retries failed", "is_fallback": True}
+            if attempt < max_retries - 1:
+                time.sleep(2)
+            else:
+                return FALLBACK_RESPONSE
+    return FALLBACK_RESPONSE
