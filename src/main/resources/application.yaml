@@ -15,5 +15,8 @@ spring:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
 
+  cache:
+    type: simple
+
 server:
   port: 8080

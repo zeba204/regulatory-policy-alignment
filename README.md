@@ -292,3 +292,24 @@ Implemented authentication and security using JWT (JSON Web Token).
 - Understood JWT authentication flow
 - Learned how to secure APIs using Spring Security
 - Implemented request filtering using JwtAuthFilter
+ 
+ ## Day 6 - Caching and RBAC
+
+### Work Done
+- Implemented JWT-based authentication
+- Protected APIs using Authorization header
+- Enabled caching using @EnableCaching
+- Used @Cacheable on GET APIs
+- Used @CacheEvict on CREATE, UPDATE, DELETE APIs
+- Configured simple in-memory cache
+- Tested all APIs using Postman
+
+### APIs Tested
+- POST /auth/register
+- POST /auth/login
+- GET /policy
+- PUT /policy/{id}
+- DELETE /policy/{id}
+
+### Learning Outcome
+Learned how caching improves performance and how RBAC secures APIs using JWT tokens.

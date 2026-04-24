@@ -18,13 +18,17 @@ public class AuthController {
 
     @PostMapping("/register")
     public String register(@RequestBody User user) {
+        if (userRepository.existsByUsername(user.getUsername())) {
+            return "Username already exists";
+        }
+
         userRepository.save(user);
         return "User Registered Successfully";
     }
 
     @PostMapping("/login")
     public String login(@RequestBody User user) {
-        User existingUser = userRepository.findByUsername(user.getUsername()).orElse(null);
+        User existingUser = userRepository.findFirstByUsername(user.getUsername()).orElse(null);
 
         if (existingUser != null && existingUser.getPassword().equals(user.getPassword())) {
             return jwtUtil.generateToken(user.getUsername());
