@@ -1,26 +1,35 @@
+server:
+  port: 8080
+
 spring:
   application:
-    name: backend
+    name: regulatory-policy-alignment
 
   datasource:
-    url: jdbc:postgresql://localhost:5432/regulatory_db
-    username: postgres
-    password: postgres
+    url: jdbc:h2:mem:testdb
+    driver-class-name: org.h2.Driver
+    username: sa
+    password: ""
+
+  h2:
+    console:
+      enabled: true
 
   jpa:
     hibernate:
       ddl-auto: update
     show-sql: true
 
-  cache:
-    type: simple
+  flyway:
+    enabled: false
 
   mail:
-    enabled: false
-    host: smtp.gmail.com
-    port: 587
-    username: yourgmail@gmail.com
-    password: your_app_password
+    host: localhost
+    port: 1025
 
-server:
-  port: 8080
+  mvc:
+    throw-exception-if-no-handler-found: true
+
+  web:
+    resources:
+      add-mappings: false

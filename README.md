@@ -313,3 +313,72 @@ Implemented authentication and security using JWT (JSON Web Token).
 
 ### Learning Outcome
 Learned how caching improves performance and how RBAC secures APIs using JWT tokens.
+
+## Day 7 - Email Notification & Scheduler
+
+### Description
+
+Implemented email notification system using JavaMailSender and Thymeleaf templates. Added scheduled tasks for daily reminders and deadline alerts using @Scheduled annotation.
+
+### Work Done
+
+* Added JavaMailSender dependency for email sending
+* Created EmailService to handle email logic
+* Used Thymeleaf template (reminder-email.html) for dynamic email content
+* Created EmailController API to trigger email notifications
+* Implemented ReminderScheduler with @Scheduled annotation
+
+  * Daily reminder (9 AM)
+  * Deadline alert (6 PM)
+* Configured application.yaml for mail properties
+* Tested email API in demo mode
+
+### API Tested
+
+POST /email/send?toEmail=[example@gmail.com](mailto:example@gmail.com)
+
+### Output
+
+* Demo email notification generated successfully
+* Console logs show scheduler execution
+
+### Learning Outcome
+
+* Learned how to implement email notifications using Spring Boot
+* Understood Thymeleaf template integration for dynamic email content
+* Learned scheduling using @Scheduled annotation
+* Understood SMTP configuration and security (App Password concept)
+
+# Day 8 – Exception Handling and Unit Testing
+
+## Task
+@ControllerAdvice – 404/400/500 consistent JSON response.  
+10 JUnit 5 unit tests for Service with Mockito.
+
+---
+
+## Work Done
+- Implemented global exception handling using `@RestControllerAdvice`
+- Added consistent JSON response for 400, 404 and 500 errors
+- Added 10 JUnit 5 test cases for `PolicyRecordService`
+- Used Mockito to mock repository layer
+- All tests passed successfully
+
+---
+
+## Screenshots
+
+### 400 – Bad Request
+![400 Error](screenshots/day8/400.png)
+
+### 404 – Not Found
+![404 Error](screenshots/day8/404.png)
+
+### 500 – Internal Server Error
+![500 Error](screenshots/day8/500.png)
+
+
+---
+
+## Status
+Day 8 Completed ✅

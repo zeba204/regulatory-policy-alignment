@@ -1,53 +1,33 @@
 package com.internship.tool.service;
 
-import jakarta.mail.internet.MimeMessage;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
-import org.thymeleaf.TemplateEngine;
-import org.thymeleaf.context.Context;
 
 @Service
 public class EmailService {
 
-    @Autowired
+    @Autowired(required = false)
     private JavaMailSender mailSender;
 
-    @Autowired
-    private TemplateEngine templateEngine;
+    public void sendEmail(String to, String subject, String body) {
 
-    @Value("${spring.mail.enabled:false}")
-    private boolean mailEnabled;
-
-    public String sendReminderEmail(String toEmail, String subject, String messageText) {
-        try {
-            Context context = new Context();
-            context.setVariable("message", messageText);
-
-            String htmlContent = templateEngine.process("reminder-email", context);
-
-            if (!mailEnabled) {
-                System.out.println("Demo Email Sent");
-                System.out.println("To: " + toEmail);
-                System.out.println("Subject: " + subject);
-                System.out.println("Message: " + messageText);
-                return "Demo email notification generated successfully";
-            }
-
-            MimeMessage message = mailSender.createMimeMessage();
-            MimeMessageHelper helper = new MimeMessageHelper(message, true);
-
-            helper.setTo(toEmail);
-            helper.setSubject(subject);
-            helper.setText(htmlContent, true);
-
-            mailSender.send(message);
-
-            return "Email sent successfully";
-        } catch (Exception e) {
-            return "Email sending failed: " + e.getMessage();
+        // ✅ DEMO MODE (no real email)
+        if (mailSender == null) {
+            System.out.println("=== DEMO EMAIL MODE ===");
+            System.out.println("To: " + to);
+            System.out.println("Subject: " + subject);
+            System.out.println("Body: " + body);
+            return;
         }
+
+        // ✅ REAL EMAIL (if configured)
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setTo(to);
+        message.setSubject(subject);
+        message.setText(body);
+
+        mailSender.send(message);
     }
 }
