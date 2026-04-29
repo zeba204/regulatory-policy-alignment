@@ -1,0 +1,16 @@
+You are a regulatory policy expert. 
+Analyze the following regulatory policy and provide a clear description.
+
+Policy Name: {policy_name}
+Policy Content: {policy_content}
+
+Provide your response in the following JSON format only:
+{
+    "title": "policy title",
+    "description": "clear description of the policy",
+    "key_points": ["point 1", "point 2", "point 3"],
+    "impact": "impact of this policy",
+    "generated_at": "current timestamp"
+}
+
+Return JSON only. No extra text.
