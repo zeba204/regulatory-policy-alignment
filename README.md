@@ -381,4 +381,17 @@ POST /email/send?toEmail=[example@gmail.com](mailto:example@gmail.com)
 ---
 
 ## Status
-Day 8 Completed ✅
+Day 8 Completed 
+
+In Day 9, I configured Docker Compose to run multiple services including:
+- Spring Boot backend
+- MySQL database
+- Redis cache
+- MailHog for email testing
+- phpMyAdmin for database management
+
+I added health checks for all services and tested using:
+docker compose up --build
+
+All services are running successfully. 
+Email functionality is verified using MailHog where test emails are captured.
