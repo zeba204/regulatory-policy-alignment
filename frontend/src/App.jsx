@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import LoginPage from './pages/LoginPage';
 import PolicyListPage from './pages/PolicyListPage';
 import Dashboard from './pages/Dashboard';
+import PolicyFormPage from './pages/PolicyFormPage';
 
 function ProtectedRoute({ children }) {
   const token = localStorage.getItem('token');
@@ -21,6 +22,16 @@ function App() {
         <Route path="/dashboard" element={
           <ProtectedRoute>
             <Dashboard />
+          </ProtectedRoute>
+        } />
+        <Route path="/policy/create" element={
+          <ProtectedRoute>
+            <PolicyFormPage />
+          </ProtectedRoute>
+        } />
+        <Route path="/policy/edit/:id" element={
+          <ProtectedRoute>
+            <PolicyFormPage />
           </ProtectedRoute>
         } />
       </Routes>
