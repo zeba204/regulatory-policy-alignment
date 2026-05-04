@@ -31,6 +31,23 @@ export default function PolicyListPage() {
       setLoading(false);
     }
   }, []);
+    
+  const handleExportCsv = async () => {
+  try {
+    const res = await api.get('/api/policies/export', {
+      responseType: 'blob',
+    });
+    const url = window.URL.createObjectURL(new Blob([res.data]));
+    const link = document.createElement('a');
+    link.href = url;
+    link.setAttribute('download', 'policies.csv');
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+  } catch (err) {
+    console.error('Export failed', err);
+  }
+};
 
   useEffect(() => { fetchPolicies(); }, [fetchPolicies]);
 
@@ -83,14 +100,20 @@ export default function PolicyListPage() {
               ({filtered.length} results)
             </span>
           </h2>
+          <div className="flex gap-3">
           <button
-            onClick={() => navigate('/policy/create')}
+           onClick={handleExportCsv}
+            className="border border-[#1B4F8A] text-[#1B4F8A] px-4 py-2 rounded-lg text-sm font-medium hover:bg-blue-50"
+          >
+           ⬇ Export CSV
+          </button>
+          <button
+           onClick={() => navigate('/policy/create')}
             className="bg-[#1B4F8A] text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-blue-800"
           >
-            + New Policy
+           + New Policy
           </button>
-        </div>
-
+          </div>
         {/* Search + Filter Bar */}
         <div className="flex gap-3 mb-6 flex-wrap">
           <input

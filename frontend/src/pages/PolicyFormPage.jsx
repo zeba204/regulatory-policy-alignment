@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import api from '../services/api';
 import AiPanel from '../components/AiPanel';
+import FileUpload from '../components/FileUpload';
 
 export default function PolicyFormPage() {
   const { id } = useParams();
@@ -194,6 +195,11 @@ export default function PolicyFormPage() {
         <div className="max-w-2xl mx-auto px-6 pb-8">
           <AiPanel policyId={id} policyName={form.policyName} />
         </div>
+      )}
+      {isEdit && (
+        <div className="max-w-2xl mx-auto px-6 pb-8">
+          <FileUpload policyId={id} />
+      </div>
       )}
 
     </div>
