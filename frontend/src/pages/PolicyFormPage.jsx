@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import api from '../services/api';
+import AiPanel from '../components/AiPanel';
 
 export default function PolicyFormPage() {
   const { id } = useParams();
@@ -74,6 +75,7 @@ export default function PolicyFormPage() {
 
   return (
     <div className="min-h-screen bg-gray-50">
+
       {/* Navbar */}
       <nav className="bg-[#1B4F8A] text-white px-6 py-4 flex justify-between items-center shadow">
         <h1 className="text-lg font-bold">Regulatory Policy Alignment</h1>
@@ -85,6 +87,7 @@ export default function PolicyFormPage() {
         </button>
       </nav>
 
+      {/* Form Section */}
       <div className="max-w-2xl mx-auto px-6 py-8">
         <h2 className="text-xl font-semibold text-gray-800 mb-6">
           {isEdit ? 'Edit Policy' : 'Create New Policy'}
@@ -97,6 +100,7 @@ export default function PolicyFormPage() {
         )}
 
         <div className="bg-white rounded-xl shadow p-6 space-y-4">
+
           {/* Policy Name */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -155,7 +159,7 @@ export default function PolicyFormPage() {
             </select>
           </div>
 
-          {/* Buttons */}
+          {/* Buttons Row */}
           <div className="flex gap-3 pt-2">
             <button
               onClick={handleSubmit}
@@ -181,8 +185,17 @@ export default function PolicyFormPage() {
               Cancel
             </button>
           </div>
+
         </div>
       </div>
+
+      {/* AI Panel — OUTSIDE form card, only on edit page */}
+      {isEdit && (
+        <div className="max-w-2xl mx-auto px-6 pb-8">
+          <AiPanel policyId={id} policyName={form.policyName} />
+        </div>
+      )}
+
     </div>
   );
 }
