@@ -76,6 +76,9 @@ export default function Dashboard() {
             onClick={logout}
             className="bg-white text-[#1B4F8A] text-sm px-3 py-1 rounded font-medium hover:bg-gray-100"
           >
+            <button onClick={() => navigate('/analytics')} className="text-sm hover:underline">
+             Analytics
+          </button>
             Logout
           </button>
         </div>
