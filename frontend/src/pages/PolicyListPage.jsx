@@ -1,12 +1,15 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import api from '../services/api';
+import { useAuth } from '../context/AuthContext';
 
 export default function PolicyListPage() {
   const [policies, setPolicies] = useState([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
   const navigate = useNavigate();
+  
+  const { logout } = useAuth();
 
   const fetchPolicies = async () => {
     try {
@@ -21,10 +24,7 @@ export default function PolicyListPage() {
 
   useEffect(() => { fetchPolicies(); }, []);
 
-  const handleLogout = () => {
-    localStorage.removeItem('token');
-    navigate('/login');
-  };
+  const handleLogout = () => logout();
 
   const filtered = policies.filter(p =>
     p.policyName?.toLowerCase().includes(search.toLowerCase()) ||

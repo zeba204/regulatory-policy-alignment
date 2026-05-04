@@ -1,20 +1,21 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import api from '../services/api';
+import { useAuth } from '../context/AuthContext';
 
 export default function LoginPage() {
   const [form, setForm] = useState({ username: '', password: '' });
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
-  const navigate = useNavigate();
+  const { login } = useAuth();
 
   const handleSubmit = async () => {
+    if (!form.username || !form.password) {
+      setError('Please enter username and password');
+      return;
+    }
     setLoading(true);
     setError('');
     try {
-      const res = await api.post('/api/auth/login', form);
-      localStorage.setItem('token', res.data.token);
-      navigate('/');
+      await login(form.username, form.password);
     } catch (err) {
       setError('Invalid username or password');
     } finally {
@@ -25,7 +26,7 @@ export default function LoginPage() {
   return (
     <div className="min-h-screen bg-gray-100 flex items-center justify-center">
       <div className="bg-white p-8 rounded-xl shadow-md w-full max-w-md">
-        <h1 className="text-2xl font-bold text-primary mb-2">
+        <h1 className="text-2xl font-bold text-[#1B4F8A] mb-2">
           Regulatory Policy Alignment
         </h1>
         <p className="text-gray-500 mb-6 text-sm">Sign in to your account</p>
@@ -43,7 +44,7 @@ export default function LoginPage() {
             </label>
             <input
               type="text"
-              className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
+              className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#1B4F8A]"
               value={form.username}
               onChange={(e) => setForm({ ...form, username: e.target.value })}
               placeholder="Enter username"
@@ -55,7 +56,7 @@ export default function LoginPage() {
             </label>
             <input
               type="password"
-              className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
+              className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#1B4F8A]"
               value={form.password}
               onChange={(e) => setForm({ ...form, password: e.target.value })}
               placeholder="Enter password"
@@ -64,7 +65,7 @@ export default function LoginPage() {
           <button
             onClick={handleSubmit}
             disabled={loading}
-            className="w-full bg-primary text-white py-2 rounded-lg font-medium hover:bg-blue-800 transition disabled:opacity-50"
+            className="w-full bg-[#1B4F8A] text-white py-2 rounded-lg font-medium hover:bg-blue-800 transition disabled:opacity-50"
           >
             {loading ? 'Signing in...' : 'Sign In'}
           </button>
