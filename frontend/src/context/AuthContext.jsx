@@ -11,13 +11,24 @@ export function AuthProvider({ children }) {
   });
   const navigate = useNavigate();
 
-  const login = async (username, password) => {
+  /*const login = async (username, password) => {
     const res = await api.post('/api/auth/login', { username, password });
     const token = res.data.token;
     localStorage.setItem('token', token);
     setUser({ token });
     navigate('/');
-  };
+  };*/
+  const login = async (username, password) => {
+  // Temporary bypass — remove when backend is running
+  if (username === 'admin' && password === 'admin123') {
+    const fakeToken = 'fake-jwt-token-for-testing';
+    localStorage.setItem('token', fakeToken);
+    setUser({ token: fakeToken });
+    navigate('/');
+  } else {
+    throw new Error('Invalid credentials');
+  }
+};
 
   const logout = () => {
     localStorage.removeItem('token');
