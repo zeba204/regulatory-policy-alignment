@@ -6,6 +6,7 @@ import PolicyListPage from './pages/PolicyListPage';
 import Dashboard from './pages/Dashboard';
 import PolicyFormPage from './pages/PolicyFormPage';
 import AnalyticsPage from './pages/AnalyticsPage';
+import PolicyDetailPage from './pages/PolicyDetailPage';
 
 function ProtectedRoute({ children }) {
   const { user } = useAuth();
@@ -39,6 +40,11 @@ function AppRoutes() {
       <Route path="/analytics" element={
         <ProtectedRoute>
          <AnalyticsPage />
+        </ProtectedRoute>
+      } />
+      <Route path="/policy/:id" element={
+        <ProtectedRoute>
+         <PolicyDetailPage />
         </ProtectedRoute>
       } />
     </Routes>

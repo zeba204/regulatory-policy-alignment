@@ -10,13 +10,17 @@ export default function PolicyListPage() {
   const [search, setSearch] = useState('');
   const [statusFilter, setStatusFilter] = useState('ALL');
   const [debouncedSearch, setDebouncedSearch] = useState('');
+  const [page, setPage] = useState(0);
+  const [dateFrom, setDateFrom] = useState('');
+  const [dateTo, setDateTo] = useState('');
+  const PAGE_SIZE = 10;
   const navigate = useNavigate();
   const { logout } = useAuth();
-
-  // Debounce search — waits 400ms after user stops typing
+  // Debounce search
   useEffect(() => {
     const timer = setTimeout(() => {
       setDebouncedSearch(search);
+      setPage(0);
     }, 400);
     return () => clearTimeout(timer);
   }, [search]);
@@ -32,25 +36,25 @@ export default function PolicyListPage() {
       setLoading(false);
     }
   }, []);
-    
-  const handleExportCsv = async () => {
-  try {
-    const res = await api.get('/api/policies/export', {
-      responseType: 'blob',
-    });
-    const url = window.URL.createObjectURL(new Blob([res.data]));
-    const link = document.createElement('a');
-    link.href = url;
-    link.setAttribute('download', 'policies.csv');
-    document.body.appendChild(link);
-    link.click();
-    link.remove();
-  } catch (err) {
-    console.error('Export failed', err);
-  }
-};
 
   useEffect(() => { fetchPolicies(); }, [fetchPolicies]);
+
+  const handleExportCsv = async () => {
+    try {
+      const res = await api.get('/api/policies/export', {
+        responseType: 'blob',
+      });
+      const url = window.URL.createObjectURL(new Blob([res.data]));
+      const link = document.createElement('a');
+      link.href = url;
+      link.setAttribute('download', 'policies.csv');
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+    } catch (err) {
+      console.error('Export failed', err);
+    }
+  };
 
   const getStatusColor = (status) => {
     switch (status?.toUpperCase()) {
@@ -61,28 +65,34 @@ export default function PolicyListPage() {
     }
   };
 
-  // Filter by search AND status
+  // Filter by search + status + date range
   const filtered = policies.filter(p => {
     const matchesSearch =
       p.policyName?.toLowerCase().includes(debouncedSearch.toLowerCase()) ||
       p.category?.toLowerCase().includes(debouncedSearch.toLowerCase());
     const matchesStatus =
       statusFilter === 'ALL' || p.status === statusFilter;
-    return matchesSearch && matchesStatus;
+    const pDate = p.createdDate ? new Date(p.createdDate) : null;
+    const matchesFrom = !dateFrom || (pDate && pDate >= new Date(dateFrom));
+    const matchesTo = !dateTo || (pDate && pDate <= new Date(dateTo));
+    return matchesSearch && matchesStatus && matchesFrom && matchesTo;
   });
+
+  const paginated = filtered.slice(page * PAGE_SIZE, (page + 1) * PAGE_SIZE);
+  const totalPages = Math.ceil(filtered.length / PAGE_SIZE);
 
   return (
     <div className="min-h-screen bg-gray-50">
+
       {/* Navbar */}
-      <nav className="bg-[#1B4F8A] text-white px-6 py-4 flex justify-between items-center shadow">
-        <nav className="bg-[#1B4F8A] text-white px-4 py-4 flex flex-wrap justify-between items-center shadow gap-2"></nav>
+      <nav className="bg-[#1B4F8A] text-white px-4 py-4 flex flex-wrap justify-between items-center shadow gap-2">
         <h1 className="text-lg font-bold">Regulatory Policy Alignment</h1>
-        <div className="flex gap-4 items-center">
-          <button
-            onClick={() => navigate('/dashboard')}
-            className="text-sm hover:underline"
-          >
+        <div className="flex gap-4 items-center flex-wrap">
+          <button onClick={() => navigate('/dashboard')} className="text-sm hover:underline">
             Dashboard
+          </button>
+          <button onClick={() => navigate('/analytics')} className="text-sm hover:underline">
+            Analytics
           </button>
           <button
             onClick={logout}
@@ -94,28 +104,31 @@ export default function PolicyListPage() {
       </nav>
 
       <div className="max-w-6xl mx-auto px-6 py-8">
+
         {/* Header */}
-        <div className="flex justify-between items-center mb-6">
+        <div className="flex justify-between items-center mb-6 flex-wrap gap-3">
           <h2 className="text-xl font-semibold text-gray-800">
             Policy Records
             <span className="ml-2 text-sm font-normal text-gray-400">
               ({filtered.length} results)
             </span>
           </h2>
-          <div className="flex gap-3">
-          <button
-           onClick={handleExportCsv}
-            className="border border-[#1B4F8A] text-[#1B4F8A] px-4 py-2 rounded-lg text-sm font-medium hover:bg-blue-50"
-          >
-           ⬇ Export CSV
-          </button>
-          <button
-           onClick={() => navigate('/policy/create')}
-            className="bg-[#1B4F8A] text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-blue-800"
-          >
-           + New Policy
-          </button>
+          <div className="flex gap-3 flex-wrap">
+            <button
+              onClick={handleExportCsv}
+              className="border border-[#1B4F8A] text-[#1B4F8A] px-4 py-2 rounded-lg text-sm font-medium hover:bg-blue-50"
+            >
+              ⬇ Export CSV
+            </button>
+            <button
+              onClick={() => navigate('/policy/create')}
+              className="bg-[#1B4F8A] text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-blue-800"
+            >
+              + New Policy
+            </button>
           </div>
+        </div>
+
         {/* Search + Filter Bar */}
         <div className="flex gap-3 mb-6 flex-wrap">
           <input
@@ -128,16 +141,34 @@ export default function PolicyListPage() {
           <select
             className="border border-gray-300 rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#1B4F8A]"
             value={statusFilter}
-            onChange={(e) => setStatusFilter(e.target.value)}
+            onChange={(e) => { setStatusFilter(e.target.value); setPage(0); }}
           >
             <option value="ALL">All Statuses</option>
             <option value="ACTIVE">Active</option>
             <option value="INACTIVE">Inactive</option>
             <option value="PENDING">Pending</option>
           </select>
-          {(search || statusFilter !== 'ALL') && (
+          <input
+            type="date"
+            className="border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#1B4F8A]"
+            value={dateFrom}
+            onChange={(e) => { setDateFrom(e.target.value); setPage(0); }}
+          />
+          <input
+            type="date"
+            className="border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#1B4F8A]"
+            value={dateTo}
+            onChange={(e) => { setDateTo(e.target.value); setPage(0); }}
+          />
+          {(search || statusFilter !== 'ALL' || dateFrom || dateTo) && (
             <button
-              onClick={() => { setSearch(''); setStatusFilter('ALL'); }}
+              onClick={() => {
+                setSearch('');
+                setStatusFilter('ALL');
+                setDateFrom('');
+                setDateTo('');
+                setPage(0);
+              }}
               className="text-sm text-gray-500 hover:text-gray-700 px-3 py-2 border border-gray-300 rounded-lg hover:bg-gray-50"
             >
               Clear Filters
@@ -146,36 +177,9 @@ export default function PolicyListPage() {
         </div>
 
         {/* Table */}
-         {loading ? (
-        <div className="bg-white rounded-xl shadow overflow-hidden">
+        {loading ? (
           <div className="bg-white rounded-xl shadow overflow-x-auto">
-          <table className="w-full text-sm min-w-[600px]"></table>
-        <table className="w-full text-sm">
-        <thead className="bg-gray-50 border-b">
-        <tr>
-          <th className="text-left px-4 py-3 text-gray-600 font-medium">Policy Name</th>
-          <th className="text-left px-4 py-3 text-gray-600 font-medium">Category</th>
-          <th className="text-left px-4 py-3 text-gray-600 font-medium">Status</th>
-          <th className="text-left px-4 py-3 text-gray-600 font-medium">AI Score</th>
-          <th className="text-left px-4 py-3 text-gray-600 font-medium">Created</th>
-          <th className="text-left px-4 py-3 text-gray-600 font-medium">Actions</th>
-        </tr>
-        </thead>
-        <tbody>
-        {Array.from({ length: 5 }).map((_, i) => (
-          <SkeletonRow key={i} cols={6} />
-        ))}
-        </tbody>
-      </table>
-      </div>
-        ) : filtered.length === 0 ? (
-          <div className="text-center py-20 text-gray-400">
-            <p className="text-lg">No policies found</p>
-            <p className="text-sm mt-1">Try adjusting your search or filters</p>
-          </div>
-        ) : (
-          <div className="bg-white rounded-xl shadow overflow-hidden">
-            <table className="w-full text-sm">
+            <table className="w-full text-sm min-w-[600px]">
               <thead className="bg-gray-50 border-b">
                 <tr>
                   <th className="text-left px-4 py-3 text-gray-600 font-medium">Policy Name</th>
@@ -187,9 +191,37 @@ export default function PolicyListPage() {
                 </tr>
               </thead>
               <tbody>
-                {filtered.map((policy) => (
+                {Array.from({ length: 5 }).map((_, i) => (
+                  <SkeletonRow key={i} cols={6} />
+                ))}
+              </tbody>
+            </table>
+          </div>
+        ) : filtered.length === 0 ? (
+          <div className="text-center py-20 text-gray-400">
+            <p className="text-lg">No policies found</p>
+            <p className="text-sm mt-1">Try adjusting your search or filters</p>
+          </div>
+        ) : (
+          <div className="bg-white rounded-xl shadow overflow-x-auto">
+            <table className="w-full text-sm min-w-[600px]">
+              <thead className="bg-gray-50 border-b">
+                <tr>
+                  <th className="text-left px-4 py-3 text-gray-600 font-medium">Policy Name</th>
+                  <th className="text-left px-4 py-3 text-gray-600 font-medium">Category</th>
+                  <th className="text-left px-4 py-3 text-gray-600 font-medium">Status</th>
+                  <th className="text-left px-4 py-3 text-gray-600 font-medium">AI Score</th>
+                  <th className="text-left px-4 py-3 text-gray-600 font-medium">Created</th>
+                  <th className="text-left px-4 py-3 text-gray-600 font-medium">Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {paginated.map((policy) => (
                   <tr key={policy.id} className="border-b hover:bg-gray-50">
-                    <td className="px-4 py-3 font-medium text-[#1B4F8A]">
+                    <td
+                      className="px-4 py-3 font-medium text-[#1B4F8A] cursor-pointer hover:underline"
+                      onClick={() => navigate(`/policy/${policy.id}`)}
+                    >
                       {policy.policyName}
                     </td>
                     <td className="px-4 py-3 text-gray-600">{policy.category}</td>
@@ -220,6 +252,40 @@ export default function PolicyListPage() {
             </table>
           </div>
         )}
+
+        {/* Pagination */}
+        {totalPages > 1 && (
+          <div className="flex justify-center items-center gap-2 mt-4 flex-wrap">
+            <button
+              onClick={() => setPage(p => Math.max(0, p - 1))}
+              disabled={page === 0}
+              className="px-3 py-1 rounded border border-gray-300 text-sm text-gray-600 hover:bg-gray-50 disabled:opacity-40"
+            >
+              ← Prev
+            </button>
+            {Array.from({ length: totalPages }).map((_, i) => (
+              <button
+                key={i}
+                onClick={() => setPage(i)}
+                className={`px-3 py-1 rounded border text-sm font-medium ${
+                  page === i
+                    ? 'bg-[#1B4F8A] text-white border-[#1B4F8A]'
+                    : 'border-gray-300 text-gray-600 hover:bg-gray-50'
+                }`}
+              >
+                {i + 1}
+              </button>
+            ))}
+            <button
+              onClick={() => setPage(p => Math.min(totalPages - 1, p + 1))}
+              disabled={page === totalPages - 1}
+              className="px-3 py-1 rounded border border-gray-300 text-sm text-gray-600 hover:bg-gray-50 disabled:opacity-40"
+            >
+              Next →
+            </button>
+          </div>
+        )}
+
       </div>
     </div>
   );
