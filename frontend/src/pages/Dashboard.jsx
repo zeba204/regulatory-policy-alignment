@@ -63,6 +63,7 @@ export default function Dashboard() {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Navbar */}
+      <nav className="bg-[#1B4F8A] text-white px-4 py-4 flex flex-wrap justify-between items-center shadow gap-2"></nav>
       <nav className="bg-[#1B4F8A] text-white px-6 py-4 flex justify-between items-center shadow">
         <h1 className="text-lg font-bold">Regulatory Policy Alignment</h1>
         <div className="flex gap-4 items-center">

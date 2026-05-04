@@ -2,6 +2,7 @@ import { useEffect, useState, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import api from '../services/api';
+import SkeletonRow from '../components/SkeletonRow';
 
 export default function PolicyListPage() {
   const [policies, setPolicies] = useState([]);
@@ -74,6 +75,7 @@ export default function PolicyListPage() {
     <div className="min-h-screen bg-gray-50">
       {/* Navbar */}
       <nav className="bg-[#1B4F8A] text-white px-6 py-4 flex justify-between items-center shadow">
+        <nav className="bg-[#1B4F8A] text-white px-4 py-4 flex flex-wrap justify-between items-center shadow gap-2"></nav>
         <h1 className="text-lg font-bold">Regulatory Policy Alignment</h1>
         <div className="flex gap-4 items-center">
           <button
@@ -144,10 +146,28 @@ export default function PolicyListPage() {
         </div>
 
         {/* Table */}
-        {loading ? (
-          <div className="text-center py-20 text-gray-400">
-            Loading policies...
-          </div>
+         {loading ? (
+        <div className="bg-white rounded-xl shadow overflow-hidden">
+          <div className="bg-white rounded-xl shadow overflow-x-auto">
+          <table className="w-full text-sm min-w-[600px]"></table>
+        <table className="w-full text-sm">
+        <thead className="bg-gray-50 border-b">
+        <tr>
+          <th className="text-left px-4 py-3 text-gray-600 font-medium">Policy Name</th>
+          <th className="text-left px-4 py-3 text-gray-600 font-medium">Category</th>
+          <th className="text-left px-4 py-3 text-gray-600 font-medium">Status</th>
+          <th className="text-left px-4 py-3 text-gray-600 font-medium">AI Score</th>
+          <th className="text-left px-4 py-3 text-gray-600 font-medium">Created</th>
+          <th className="text-left px-4 py-3 text-gray-600 font-medium">Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        {Array.from({ length: 5 }).map((_, i) => (
+          <SkeletonRow key={i} cols={6} />
+        ))}
+        </tbody>
+      </table>
+      </div>
         ) : filtered.length === 0 ? (
           <div className="text-center py-20 text-gray-400">
             <p className="text-lg">No policies found</p>
