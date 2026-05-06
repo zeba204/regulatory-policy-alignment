@@ -43,7 +43,14 @@ public class PolicyRecordService {
 
         return repository.save(existing);
     }
+    @Cacheable(value = "policies")
+    public List<PolicyRecord> searchPolicies(String keyword) {
 
+        return repository.findByPolicyNameContainingIgnoreCaseOrCategoryContainingIgnoreCase(
+            keyword,
+            keyword
+        );
+    }
     @CacheEvict(value = {"policies", "policy"}, allEntries = true)
     public void deletePolicy(Long id) {
         PolicyRecord existing = repository.findById(id)

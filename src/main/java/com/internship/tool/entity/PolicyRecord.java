@@ -4,9 +4,12 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
+import java.time.LocalDateTime;
+
 @Entity
 @Table(name = "policy_record")
-public class PolicyRecord {
+public class PolicyRecord implements java.io.Serializable {
+    private static final long serialVersionUID = 1L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,6 +28,15 @@ public class PolicyRecord {
 
     @NotBlank(message = "Status is required")
     private String status;
+
+    // AI score
+    private Integer aiScore;
+
+    // Audit field
+    private String createdBy;
+
+    // Timestamp
+    private LocalDateTime createdDate;
 
     public PolicyRecord() {
     }
@@ -63,5 +75,29 @@ public class PolicyRecord {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public Integer getAiScore() {
+        return aiScore;
+    }
+
+    public void setAiScore(Integer aiScore) {
+        this.aiScore = aiScore;
+    }
+
+    public String getCreatedBy() {
+        return createdBy;
+    }
+
+    public void setCreatedBy(String createdBy) {
+        this.createdBy = createdBy;
+    }
+
+    public LocalDateTime getCreatedDate() {
+        return createdDate;
+    }
+
+    public void setCreatedDate(LocalDateTime createdDate) {
+        this.createdDate = createdDate;
     }
 }
