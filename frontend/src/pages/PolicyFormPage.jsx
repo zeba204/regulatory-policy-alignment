@@ -21,7 +21,7 @@ export default function PolicyFormPage() {
 
   useEffect(() => {
     if (isEdit) {
-      api.get(`/api/policies/${id}`)
+      api.get(`/api/policy-records/${id}`)
         .then(res => {
           setForm({
             policyName: res.data.policyName || '',
@@ -44,9 +44,9 @@ export default function PolicyFormPage() {
     setError('');
     try {
       if (isEdit) {
-        await api.put(`/api/policies/${id}`, form);
+        await api.put(`/api/policy-records/${id}`, form);
       } else {
-        await api.post('/api/policies', form);
+        await api.post('/api/policy-records', form);
       }
       navigate('/');
     } catch (err) {
@@ -59,7 +59,7 @@ export default function PolicyFormPage() {
   const handleDelete = async () => {
     if (!window.confirm('Are you sure you want to delete this policy?')) return;
     try {
-      await api.delete(`/api/policies/${id}`);
+      await api.delete(`/api/policy-records/${id}`);
       navigate('/');
     } catch (err) {
       setError('Failed to delete policy');

@@ -4,6 +4,10 @@ import com.internship.tool.entity.PolicyRecord;
 import com.internship.tool.repository.PolicyRecordRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+
+import java.time.LocalDateTime;
+import java.util.Random;
+
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
@@ -16,9 +20,13 @@ public class DataSeeder implements CommandLineRunner {
 
     @Override
     public void run(String... args) {
+
         if (policyRecordRepository.count() == 0) {
+
             log.info("Seeding database with sample data...");
-            
+
+            Random random = new Random();
+
             String[][] data = {
                 {"GDPR Compliance Policy", "General Data Protection Regulation compliance framework", "Compliance", "ACTIVE"},
                 {"Anti-Money Laundering Policy", "AML procedures and controls for financial transactions", "Finance", "ACTIVE"},
@@ -53,15 +61,26 @@ public class DataSeeder implements CommandLineRunner {
             };
 
             for (int i = 0; i < data.length; i++) {
+
                 PolicyRecord policy = new PolicyRecord();
+
                 policy.setPolicyName(data[i][0]);
                 policy.setDescription(data[i][1]);
                 policy.setCategory(data[i][2]);
                 policy.setStatus(data[i][3]);
-                policy.setAiScore((int)(Math.random() * 40) + 60);
+
+                policy.setAiScore((int) (Math.random() * 40) + 60);
+
                 policy.setCreatedBy("system");
+
+                LocalDateTime randomDate =
+                LocalDateTime.now().minusDays(random.nextInt(30));
+
+                policy.setCreatedDate(randomDate);
+
                 policyRecordRepository.save(policy);
             }
+
             log.info("Seeded 30 policy records successfully!");
         }
     }

@@ -14,7 +14,7 @@ export default function Dashboard() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    api.get('/api/policies')
+    api.get('/api/policy-records')
       .then(res => {
         const policies = res.data;
         const active = policies.filter(p => p.status === 'ACTIVE').length;

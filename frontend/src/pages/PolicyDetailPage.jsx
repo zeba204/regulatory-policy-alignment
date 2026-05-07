@@ -12,7 +12,7 @@ export default function PolicyDetailPage() {
   const [error, setError] = useState('');
 
   useEffect(() => {
-    api.get(`/api/policies/${id}`)
+    api.get(`/api/policy-records/${id}`)
       .then(res => setPolicy(res.data))
       .catch(() => setError('Policy not found'))
       .finally(() => setLoading(false));
@@ -21,7 +21,7 @@ export default function PolicyDetailPage() {
   const handleDelete = async () => {
     if (!window.confirm('Are you sure you want to delete this policy?')) return;
     try {
-      await api.delete(`/api/policies/${id}`);
+      await api.delete(`/api/policy-records/${id}`);
       navigate('/');
     } catch (err) {
       setError('Failed to delete policy');

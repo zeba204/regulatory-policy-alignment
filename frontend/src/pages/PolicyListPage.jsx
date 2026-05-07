@@ -28,7 +28,7 @@ export default function PolicyListPage() {
   const fetchPolicies = useCallback(async () => {
     setLoading(true);
     try {
-      const res = await api.get('/api/policies');
+      const res = await api.get('/api/policy-records');
       setPolicies(res.data);
     } catch (err) {
       console.error('Failed to fetch policies', err);
@@ -41,7 +41,7 @@ export default function PolicyListPage() {
 
   const handleExportCsv = async () => {
     try {
-      const res = await api.get('/api/policies/export', {
+      const res = await api.get('/api/policy-records/export', {
         responseType: 'blob',
       });
       const url = window.URL.createObjectURL(new Blob([res.data]));

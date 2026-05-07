@@ -15,7 +15,7 @@ export default function AnalyticsPage() {
   const [period, setPeriod] = useState('ALL');
 
   useEffect(() => {
-    api.get('/api/policies')
+    api.get('/api/policy-records')
       .then(res => setPolicies(res.data))
       .catch(err => console.error(err))
       .finally(() => setLoading(false));
@@ -75,8 +75,6 @@ export default function AnalyticsPage() {
             onChange={(e) => setPeriod(e.target.value)}
           >
             <option value="ALL">All Time</option>
-            <option value="30">Last 30 Days</option>
-            <option value="7">Last 7 Days</option>
           </select>
         </div>
 
