@@ -8,6 +8,13 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 
 @RestController
@@ -78,5 +85,64 @@ public class PolicyRecordController {
                 .header("Content-Disposition", "attachment; filename=policies.csv")
                 .contentType(MediaType.parseMediaType("text/csv"))
                 .body(csvBytes);
+    }
+
+    // FILE UPLOAD API
+    @PostMapping(
+    value = "/{id}/upload",
+    consumes = MediaType.MULTIPART_FORM_DATA_VALUE
+)
+    public ResponseEntity<String> uploadFile(
+            @PathVariable Long id,
+            @RequestParam("file") MultipartFile file
+    ) {
+
+        if (file.isEmpty()) {
+            return ResponseEntity.badRequest()
+                    .body("File is empty");
+        }
+
+        String contentType = file.getContentType();
+
+        if (contentType == null ||
+                (!contentType.equals("application/pdf")
+                        && !contentType.equals("image/jpeg")
+                        && !contentType.equals("image/png")
+                        && !contentType.equals("text/plain"))) {
+
+            return ResponseEntity.badRequest()
+                    .body("Invalid file type");
+        }
+
+        long maxSize = 5 * 1024 * 1024;
+
+        if (file.getSize() > maxSize) {
+            return ResponseEntity.badRequest()
+                    .body("File size exceeds 5MB");
+        }
+
+        try {
+
+            String uploadDir = "uploads/";
+
+            File directory = new File(uploadDir);
+
+            if (!directory.exists()) {
+                directory.mkdirs();
+            }
+
+            String fileName = id + "_" + file.getOriginalFilename();
+
+            Path path = Paths.get(uploadDir + fileName);
+
+            Files.write(path, file.getBytes());
+
+            return ResponseEntity.ok("File uploaded successfully");
+
+        } catch (IOException e) {
+
+            return ResponseEntity.internalServerError()
+                    .body("File upload failed");
+        }
     }
 }

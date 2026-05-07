@@ -19,7 +19,7 @@ public class AuditAspect {
 
     private final AuditLogRepository auditLogRepository;
 
-    @AfterReturning("execution(* com.internship.tool.service.*.create*(..))")
+    @AfterReturning("execution(* com.internship.tool.service.*.save*(..))")
     public void logCreate(JoinPoint joinPoint) {
         saveLog("CREATE", joinPoint);
     }
