@@ -152,6 +152,52 @@ Upload feature implemented
 Docker setup configured
 Swagger documentation configured
 Audit logging implemented
+
+## Final Demo Features
+
+- JWT-based authentication and authorization
+- Policy CRUD management
+- Advanced search and filtering
+- CSV export functionality
+- File upload with validation
+- Analytics dashboard
+- Redis caching integration
+- Flyway database migrations
+- Swagger/OpenAPI documentation
+- Dockerized backend deployment
+- Responsive React frontend
+
+## Tech Stack
+
+Frontend:
+- React
+- Vite
+- Tailwind CSS
+
+Backend:
+- Spring Boot 3
+- Java 17
+- PostgreSQL
+- Redis
+- JWT Authentication
+- Flyway
+
+DevOps & Tools:
+- Docker
+- Swagger/OpenAPI
+- Mailhog
+
+## Demo Flow
+
+1. User Authentication (JWT Login/Register)
+2. Dashboard Analytics Overview
+3. Policy Management
+4. Search and Filter Operations
+5. File Upload Validation
+6. CSV Export Functionality
+7. Swagger API Verification
+8. Dockerized Backend Verification
+
 Author
 
 Zeba Farhat
